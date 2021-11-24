@@ -26,9 +26,9 @@ router.post("/api/projects", async (req, res) => {
         }
 })
 
-router.delete("/api/projects/:projectId", async (req, res) => {
+router.delete("/api/projects/:id", async (req, res) => {
     try {
-    const id = req.params.projectId
+    const id = req.params.id
     await db('projects')
     .where({ id: id })
     .del()

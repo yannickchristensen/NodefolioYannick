@@ -37,19 +37,13 @@ function createProject() {
     }) 
 }
 
-function deleteProject(projectId, rowToDeleteIndex) {
-    fetch("/api/projects/" + projectId, {
-        method: "DELETE"
-    }).then(res => {
-        if (res.status == 200) {
-            const tableRows = document.getElementsByTagName("tr")
-            const rowToDelete = Array.from(tableRows).find(row => row.rowIndex == rowToDeleteIndex)
-            rowToDelete.remove()
-        } else {
-            console.log(res.status)
-        }
-    })
-}
+function deleteProject(id) {
+    fetch("/api/projects/" + id, {
+    method: 'DELETE',
+        })
+    .then(res => res.json())
+        .then(res => console.log(res))
+    }
 
 function updateProject(row) {
     project = {
@@ -67,6 +61,7 @@ function updateProject(row) {
     })
 }
 
-document.addEventListener("DOMContentLoaded", (event) => {
-    document.getElementById("create-project").addEventListener("click", createProject)
-})
+//document.addEventListener("DOMContentLoaded", (event) => {})
+document.getElementById("create-project").addEventListener("click", createProject)
+
+document.getElementById("delete-project").addEventListener("click", deleteProject(id))
