@@ -63,5 +63,4 @@ function updateProject(row) {
 
 //document.addEventListener("DOMContentLoaded", (event) => {})
 document.getElementById("create-project").addEventListener("click", createProject)
-
-document.getElementById("delete-project").addEventListener("click", deleteProject(id))
+document.getElementById("delete-project").addEventListener("click", deleteProject)
