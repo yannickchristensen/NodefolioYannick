@@ -52,7 +52,8 @@ router.post('/login', async (req, res) => {
                 session=req.session;
                 session.email=req.body.email;
                 console.log(req.session)
-                res.status(200);
+                res.status(200).send(dashboardPage);
+                //res.status(200).json('Succesful login');
             } else {
                 res.status(400).json('Wrong password');
             }
