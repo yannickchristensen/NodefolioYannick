@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const cookieParser = require("cookie-parser");
+const { createPage } = require("../render.js");
+const sessions = require('express-session')
 
 
 // Database Connection
@@ -46,9 +49,10 @@ router.post('/login', async (req, res) => {
         if(user) {
             const validPass = await bcrypt.compare(password, user.hash);
             if(validPass) {
-                console.log("user logged in")
-                req.session.loggedIn = true;
-                res.status(200).json('Succesful login');
+                session=req.session;
+                session.email=req.body.email;
+                console.log(req.session)
+                res.status(200);
             } else {
                 res.status(400).json('Wrong password');
             }
@@ -61,10 +65,33 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get("/admin/logout", (req, res) => {
-    req.session.loggedIn = false;
-    res.redirect("/")
-})
+router.get('/logout',(req,res) => {
+    req.session.destroy();
+    res.redirect('/');
+});
+
+var session;
+
+const adminPage = createPage("admin/admin.html");
+const dashboardPage = createPage("dashboard/dashboard.html");
+
+router.get("/admin", (req, res) => {
+    session=req.session;
+    if (session.email) {
+        res.send(dashboardPage)
+    } else {
+        res.send(adminPage)
+    }
+});
+
+router.get("/dashboard", (req, res) => {
+    session=req.session;
+    if (session.email) {
+        res.send(dashboardPage)
+    } else {
+        res.send(adminPage)
+    }
+});
 
 module.exports = {
     router

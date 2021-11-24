@@ -2,8 +2,10 @@
 const express = require('express');
 const path = require('path');
 const bcrypt = require('bcryptjs');
-const session = require('express-session')
+const sessions = require('express-session')
 const { createPage } = require("./render.js");
+const { urlencoded } = require("express");
+const cookieParser = require("cookie-parser");
 
 // Database Connection
 const db = require('knex')({
@@ -20,12 +22,16 @@ const app = express();
 // Middleware setup
 app.use(express.static("public"));
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-    secret: 'secret-key',
-    resave: false,
-    saveUninitialized: false,
-}))
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(sessions({
+    secret: "secret-key",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false 
+}));
+
 
 // Routers
 const adminRouter = require("./routers/adminRouter.js");
@@ -49,9 +55,7 @@ const projectsPage = createPage("projects/projects.html", {
 const contactPage = createPage("contact/contact.html", {
     title: "Contact"
 });
-const adminPage = createPage("admin/admin.html");
 
-const dashboardPage = createPage("dashboard/dashboard.html");
 
 // Serve pages
 app.get("/", (req, res) => {
@@ -70,21 +74,6 @@ app.get("/contact", (req, res) => {
     res.send(contactPage);
 });
 
-app.get("/admin", (req, res) => {
-    if (req.session.loggedIn) {
-        res.send(dashboardPage)
-    } else {
-        res.send(adminPage)
-    }
-});
-
-app.get("/dashboard", (req, res) => {
-    if (req.session.loggedIn) {
-        res.send(dashboardPage)
-    } else {
-        res.send(adminPage)
-    }
-});
 
 // PORT setup
 const PORT = process.env.PORT || 8080;

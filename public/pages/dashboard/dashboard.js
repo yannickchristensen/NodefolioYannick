@@ -18,14 +18,13 @@ function appendData(data) {
                 mainContainer.appendChild(div);
             }
         }
-        
+
 function createProject() {
     fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=UTF-8" },
         body: JSON.stringify({
             title: document.getElementById("title").value,
-            category: document.getElementById("category").value,
             technologies: document.getElementById("technologies").value,
         })
     }).then(res => {
@@ -56,7 +55,6 @@ function updateProject(row) {
     project = {
         id: row.cells[0].innerHTML,
         title: row.cells[1].children[0].value,
-        category: row.cells[2].children[0].value,
         technologies: row.cells[3].children[0].value,
     }
 

@@ -8,7 +8,7 @@ function login() {
         })
     }).then(res => {
         if (res.status == 200) {
-            res.redirect("/dashboard")
+            setTimeout(() => location.href= "/dashboard", 1500);
                 }
         else {
             console.log(res.status)

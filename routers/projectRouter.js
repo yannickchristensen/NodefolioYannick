@@ -39,6 +39,13 @@ router.delete("/api/projects/:projectId", async (req, res) => {
 })
 
 router.put("/api/projects/", async (req, res) => {
+    try {
+        const {id ,name, technologies} = req.body;
+        await db('projects').where({id: id}).update({name: name, technologies: technologies});
+        res.status(200).json('project updated');
+        }catch(e) {
+            res.status(400).json('Something broke')
+        }
  
 })
 
